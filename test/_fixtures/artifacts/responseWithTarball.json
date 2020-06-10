@@ -1,0 +1,16 @@
+{
+  "next_page_token" : null,
+  "items" : [ {
+    "path" : "tmp/test-tarball.tgz",
+    "node_index" : 0,
+    "url" : "https://88-270841316-gh.circle-artifacts.com/0/tmp/test-tarball.tgz"
+  }, {
+    "path" : "root/build/a.txt",
+    "node_index" : 0,
+    "url" : "https://88-270841316-gh.circle-artifacts.com/0/root/build/a.txt"
+  }, {
+    "path" : "root/build/build.php",
+    "node_index" : 0,
+    "url" : "https://88-270841316-gh.circle-artifacts.com/0/root/build/build.php"
+  } ]
+}
