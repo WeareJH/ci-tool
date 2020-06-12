@@ -12,7 +12,7 @@ class Serializer
 
         $records = [];
         foreach ($data['records'] as $record) {
-            $records[] = new Record($record['commit_hash'], $record['ci_build_job_number']);
+            $records[] = new Record($record['commit_hash'], $record['ci_build_job_number'] ?? "");
         }
 
         return new Registry($records);

@@ -42,4 +42,22 @@ class RegistryTest extends AbstractTest
         $this->assertEquals("1234", $record->getCommitHash());
         $this->assertEquals("99", $record->getBuildJobNumber());
     }
+
+    public function testRecordsAreTrimmedWhenStored()
+    {
+        $registry = $this->store->loadRegistry();
+        //add 31 records
+        for ($i = 1; $i <= 31; $i++) {
+            $registry->register(new Record("hash-$i"));
+        }
+        //first record has been trimmed off
+        $this->assertCount(30, $registry->getRecords());
+        $this->assertNull($registry->getRecordByCommitHash("hash-1"));
+
+        //this is persisted properly as well
+        $this->store->saveRegistry($registry);
+        $registry = $this->store->loadRegistry();
+        $this->assertCount(30, $registry->getRecords());
+        $this->assertNull($registry->getRecordByCommitHash("hash-1"));
+    }
 }

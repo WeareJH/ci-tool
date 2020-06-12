@@ -1,11 +1,17 @@
 {
   "autoload": {
-    "psr-4": {"CITool\\": "src/"}
+    "psr-4": {
+      "CITool\\": "src/",
+      "CITool\\Test\\": "test/"
+    }
   },
   "require": {
-    "php-di/php-di": "^6.2"
+    "php-di/php-di": "^6.2",
+    "ext-curl": "*",
+    "ext-json": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^9"
-  }
+  },
+  "bin": ["src/main.php"]
 }
