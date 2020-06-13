@@ -1,0 +1,45 @@
+version: 2
+
+jobs:
+  install:
+    working_directory: /root/build
+    docker:
+      - image: circleci/php:7.3-cli
+
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - ci-tool-composer-{{ checksum "composer.lock" }}
+            - ci-tool-composer-
+      - run: composer install
+      - save_cache:
+          key: ci-exp-composer-{{ checksum "composer.lock" }}
+          paths:
+            - ~/.composer/cache
+      - save_cache:
+          key: ci-tool-build-{{ .Revision }}
+          paths:
+            - /root/build
+
+  test:
+    working_directory: /root/build
+    docker:
+      - image: circleci/php:7.3-cli
+    steps:
+      - restore_cache:
+          keys:
+            - ci-tool-build-{{ .Revision }}
+      - run:
+          name: PHPUnit
+          command: ./vendor/bin/phpunit test/
+
+workflows:
+  version: 2
+
+  test:
+    jobs:
+      - install
+      - test:
+          requires:
+            - install
