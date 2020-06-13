@@ -2,7 +2,6 @@ version: 2
 
 jobs:
   install:
-    working_directory: /root/build
     docker:
       - image: circleci/php:7.3-cli
 
@@ -20,10 +19,9 @@ jobs:
       - save_cache:
           key: ci-tool-build-{{ .Revision }}
           paths:
-            - /root/build
+            - /home/circleci/project
 
   test:
-    working_directory: /root/build
     docker:
       - image: circleci/php:7.3-cli
     steps:

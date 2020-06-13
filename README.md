@@ -1,5 +1,7 @@
 # CI Tool
 
+[![CircleCI](https://circleci.com/gh/WeareJH/ci-tool/tree/master.svg?style=svg&circle-token=f1ac70c3eaaec13df09a2c04fc8e0d9c2cea8b61)](https://app.circleci.com/pipelines/github/WeareJH/ci-tool)
+
 ## Overview
 
 This tool provides an abstraction that can be used for optimising CI pipelines.
