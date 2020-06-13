@@ -6,17 +6,20 @@ namespace CITool\Commands;
 
 use CITool\Registry\Record;
 use CITool\Registry\Store;
+use CITool\Service\CLIOutput;
 use CITool\Util\Git;
 
 class RegisterTested implements CommandInterface
 {
     private $store;
     private $git;
+    private $output;
 
-    public function __construct(Store $store, Git $git)
+    public function __construct(Store $store, Git $git, CLIOutput $output)
     {
         $this->store = $store;
         $this->git = $git;
+        $this->output = $output;
     }
 
     public function execute(): int
@@ -24,14 +27,13 @@ class RegisterTested implements CommandInterface
         $registry = $this->store->loadRegistry();
         $commitHash = $this->git->getSignificantCommit();
         if ($registry->isCommitHashRecorded($commitHash)) {
-            echo "Commit is already registered as tested" . PHP_EOL;
+            $this->output->printLn("Commit is already registered as tested");
             return 0;
         }
 
         $registry->register(new Record($commitHash));
         $this->store->saveRegistry($registry);
-
-        echo "Commit has been registered as tested" . PHP_EOL;
+        $this->output->printLn("Commit has been registered as tested");
         return 0;
     }
 }

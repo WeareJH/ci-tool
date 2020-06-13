@@ -27,7 +27,6 @@ class RegisterTestedTest extends AbstractTest
     }
 
     /**
-     * TODO mock output and assert.
      * @throws Exception
      */
     public function testNoNewRecordsAreAddedToTheRegistryWhenCommitAlreadyExist()
@@ -41,6 +40,10 @@ class RegisterTestedTest extends AbstractTest
             ->method("exec")
             ->with("git log -1 --no-merges --pretty=format:%H")
             ->willReturn("9876");
+
+        $this->outputMock->expects($this->once())
+            ->method("printLn")
+            ->with("Commit is already registered as tested");
 
         //registry starts with 2 records.
         $this->assertCount(2, $registry->getRecords());
@@ -69,6 +72,10 @@ class RegisterTestedTest extends AbstractTest
         $this->envMock->method("readEnvVar")
             ->with("CIRCLE_BUILD_NUM")
             ->willReturn("98");
+
+        $this->outputMock->expects($this->once())
+            ->method("printLn")
+            ->with("Commit has been registered as tested");
 
         //registry starts with 2 records.
         $this->assertCount(2, $registry->getRecords());
