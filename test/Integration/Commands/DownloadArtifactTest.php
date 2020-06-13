@@ -74,7 +74,11 @@ class DownloadArtifactTest extends AbstractTest
                 ['CIRCLE_PROJECT_REPONAME'], ['CIRCLE_PROJECT_USERNAME'], ['CIRCLE_TOKEN'], ['CIRCLE_TOKEN'])
             ->willReturnOnConsecutiveCalls("test-repo", "test-user", "api-token", "api-token");
 
-        $this->gitCommitWillReturn("1234");
+        $this->shellMock->method("exec")
+            ->withConsecutive(
+                ["git log -1 --no-merges --pretty=format:%H"], ["git rev-parse HEAD"])
+            ->willReturnOnConsecutiveCalls("1234", "8888");
+
         $this->httpMock->expects($this->once())
             ->method('getJson')
             ->with(
@@ -92,7 +96,7 @@ class DownloadArtifactTest extends AbstractTest
             ->method('downloadToFile')
             ->with(
                 "https://88-270841316-gh.circle-artifacts.com/0/tmp/test-tarball.tgz",
-                "/tmp/test-tarball.tgz",
+                "/tmp/8888.tgz",
                 ["Circle-Token: api-token"]
             );
 
@@ -103,7 +107,7 @@ class DownloadArtifactTest extends AbstractTest
             ->withConsecutive(
                 ['Artifact Found'],
                 [$foundArtifact],
-                ["Artifact has been downloaded to /tmp/test-tarball.tgz"]
+                ["Artifact has been downloaded to /tmp/8888.tgz"]
             );
 
         $status = $this->downloadArtifactCmd->execute();

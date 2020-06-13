@@ -17,12 +17,21 @@ class Git
      * @return string
      * @throws Exception
      */
-    public function getCommit(): string
+    public function getSignificantCommit(): string
     {
         $commit = $this->shell->exec("git log -1 --no-merges --pretty=format:%H");
         if (!$commit) {
-            throw new \Exception("Failed to read the commit hash. Is git available?");
+            throw new \Exception("Failed to read the significant commit hash. Is git available?");
         }
         return trim($commit);
+    }
+
+    public function getHeadCommit(): string
+    {
+        $hash = $this->shell->exec("git rev-parse HEAD");
+        if (!$hash) {
+            throw new \Exception("Failed to read the head commit hash. Is git available?");
+        }
+        return trim($hash);
     }
 }

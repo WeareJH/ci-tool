@@ -22,7 +22,7 @@ class RegisterTested implements CommandInterface
     public function execute(): int
     {
         $registry = $this->store->loadRegistry();
-        $commitHash = $this->git->getCommit();
+        $commitHash = $this->git->getSignificantCommit();
         if ($registry->isCommitHashRecorded($commitHash)) {
             echo "Commit is already registered as tested" . PHP_EOL;
             return 0;

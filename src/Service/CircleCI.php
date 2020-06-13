@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CITool\Service;
 
 use CITool\Util\CircleCI as CircleUtil;
+use CITool\Util\Git;
 
 class CircleCI
 {
@@ -12,12 +13,14 @@ class CircleCI
     private $http;
     private $circleUtil;
     private $output;
+    private $git;
 
-    public function __construct(Http $http, CircleUtil $circleUtil, CLIOutput $output)
+    public function __construct(Http $http, CircleUtil $circleUtil, Git $git, CLIOutput $output)
     {
         $this->http = $http;
         $this->circleUtil = $circleUtil;
         $this->output = $output;
+        $this->git = $git;
     }
 
     /**
@@ -38,7 +41,7 @@ class CircleCI
         }
 
         try {
-            $targetFile = '/' . $artifactMeta['path'];
+            $targetFile = $this->getDownloadTargetPath($artifactMeta['path']);
             $this->http->downloadToFile(
                 $artifactMeta['url'],
                 $targetFile,
@@ -49,6 +52,18 @@ class CircleCI
         } catch (\Throwable $e) {
             throw new \Exception("Failed to download build tarball from '{$artifactMeta['url']}'", 1, $e);
         }
+    }
+
+    /**
+     * @param string $artifactPath
+     * @return string
+     * @throws \Exception
+     */
+    private function getDownloadTargetPath(string $artifactPath): string
+    {
+        $currentFileName = basename($artifactPath);
+        $newFileName = $this->git->getHeadCommit() . '.tgz';
+        return '/' . str_replace($currentFileName, $newFileName, $artifactPath);
     }
 
     /**

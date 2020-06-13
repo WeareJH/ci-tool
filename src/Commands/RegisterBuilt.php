@@ -28,7 +28,7 @@ class RegisterBuilt implements CommandInterface
     public function execute(): int
     {
         $registry = $this->store->loadRegistry();
-        $registry->register(new Record($this->git->getCommit(), $this->circleCI->getBuildNumber()));
+        $registry->register(new Record($this->git->getSignificantCommit(), $this->circleCI->getBuildNumber()));
         $this->store->saveRegistry($registry);
         $this->output->printLn("Commit has been registered as built.");
         return 0;

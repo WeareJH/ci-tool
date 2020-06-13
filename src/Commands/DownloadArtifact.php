@@ -27,7 +27,7 @@ class DownloadArtifact implements CommandInterface
     public function execute(): int
     {
         $registry = $this->store->loadRegistry();
-        $record   = $registry->getRecordByCommitHash($this->git->getCommit());
+        $record   = $registry->getRecordByCommitHash($this->git->getSignificantCommit());
 
         if (!$record || !$record->getBuildJobNumber()) {
             $this->output->printLn("Commit is not registered as built. There is no artifact to download");
