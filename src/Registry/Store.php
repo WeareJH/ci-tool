@@ -18,6 +18,11 @@ class Store
         }
     }
 
+    public function getStorageFile(): string
+    {
+        return $this->storageFile;
+    }
+
     public function loadRegistry(): Registry
     {
         return $this->serializer->deserialize(file_get_contents($this->storageFile));
