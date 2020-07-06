@@ -6,20 +6,20 @@ namespace CITool\Registry;
 
 class Record
 {
-    private $commitHash;
+    private $hash;
     private $buildJobNumber;
 
     public function __construct(
-        string $commitHash,
+        string $hash,
         string $buildJobNumber = ""
     ) {
-        $this->commitHash = $commitHash;
+        $this->hash = $hash;
         $this->buildJobNumber = $buildJobNumber;
     }
 
-    public function getCommitHash(): string
+    public function getHash(): string
     {
-        return $this->commitHash;
+        return $this->hash;
     }
 
     public function getBuildJobNumber(): string

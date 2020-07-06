@@ -76,7 +76,7 @@ class DownloadArtifactTest extends AbstractTest
 
         $this->shellMock->method("exec")
             ->withConsecutive(
-                ["git log -1 --no-merges --pretty=format:%H"], ["git rev-parse HEAD"])
+                ["git diff $(git rev-list --max-parents=0 HEAD)..HEAD | shasum | awk '{print $1}'"], ["git rev-parse HEAD"])
             ->willReturnOnConsecutiveCalls("1234", "8888");
 
         $this->httpMock->expects($this->once())

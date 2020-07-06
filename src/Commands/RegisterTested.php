@@ -25,15 +25,15 @@ class RegisterTested implements CommandInterface
     public function execute(): int
     {
         $registry = $this->store->loadRegistry();
-        $commitHash = $this->git->getSignificantCommit();
-        if ($registry->isCommitHashRecorded($commitHash)) {
-            $this->output->printLn("Commit is already registered as tested");
+        $hash = $this->git->getCurrentHash();
+        if ($registry->isHashRecorded($hash)) {
+            $this->output->printLn("Hash is already registered as tested");
             return 0;
         }
 
-        $registry->register(new Record($commitHash));
+        $registry->register(new Record($hash));
         $this->store->saveRegistry($registry);
-        $this->output->printLn("Commit has been registered as tested");
+        $this->output->printLn("Hash has been registered as tested");
         return 0;
     }
 }

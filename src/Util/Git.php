@@ -17,13 +17,13 @@ class Git
      * @return string
      * @throws Exception
      */
-    public function getSignificantCommit(): string
+    public function getCurrentHash(): string
     {
-        $commit = $this->shell->exec("git log -1 --no-merges --pretty=format:%H");
-        if (!$commit) {
-            throw new \Exception("Failed to read the significant commit hash. Is git available?");
+        $hash = $this->shell->exec("git diff $(git rev-list --max-parents=0 HEAD)..HEAD | shasum | awk '{print $1}'");
+        if (!$hash) {
+            throw new \Exception("Failed to read the current tree hash. Is git available?");
         }
-        return trim($commit);
+        return trim($hash);
     }
 
     public function getHeadCommit(): string

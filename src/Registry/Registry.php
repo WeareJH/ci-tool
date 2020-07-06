@@ -23,10 +23,10 @@ class Registry
         return $this->records;
     }
 
-    public function getRecordByCommitHash(string $hash): ?Record
+    public function getRecordByHash(string $hash): ?Record
     {
         foreach ($this->records as $record) {
-            if ($record->getCommitHash() === $hash) {
+            if ($record->getHash() === $hash) {
                 return $record;
             }
         }
@@ -37,7 +37,7 @@ class Registry
     {
         //update if it exists
         foreach ($this->records as $key => $existingRecord) {
-            if ($existingRecord->getCommitHash() === $record->getCommitHash()) {
+            if ($existingRecord->getHash() === $record->getHash()) {
                 $this->records[$key] = $record;
                 return;
             }
@@ -54,8 +54,8 @@ class Registry
         }
     }
 
-    public function isCommitHashRecorded(string $hash): bool
+    public function isHashRecorded(string $hash): bool
     {
-        return (bool) $this->getRecordByCommitHash($hash);
+        return (bool) $this->getRecordByHash($hash);
     }
 }

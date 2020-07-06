@@ -24,28 +24,28 @@ class GitTest extends AbstractTest
         $this->git = $c->get(Git::class);
     }
 
-    public function testCommitHashIsRetrievedAndReturned()
+    public function testHashIsRetrievedAndReturned()
     {
         $mockedHash = "abcdefg";
         $this->shellMock->expects($this->once())
             ->method("exec")
-            ->with("git log -1 --no-merges --pretty=format:%H")
+            ->with("git diff $(git rev-list --max-parents=0 HEAD)..HEAD | shasum | awk '{print $1}'")
             ->willReturn($mockedHash);
 
-        $commitHash = $this->git->getSignificantCommit();
-        $this->assertEquals($mockedHash, $commitHash);
+        $hash = $this->git->getCurrentHash();
+        $this->assertEquals($mockedHash, $hash);
     }
 
     public function testExceptionIsThrownWhenHashCannotBeRetrieved()
     {
         $this->shellMock->expects($this->once())
             ->method("exec")
-            ->with("git log -1 --no-merges --pretty=format:%H")
+            ->with("git diff $(git rev-list --max-parents=0 HEAD)..HEAD | shasum | awk '{print $1}'")
             ->willReturn(null);
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage("Failed to read the significant commit hash. Is git available?");
-        $this->git->getSignificantCommit();
+        $this->expectExceptionMessage("Failed to read the current tree hash. Is git available?");
+        $this->git->getCurrentHash();
     }
 
     public function testHeadHashIsRetrievedAndReturned()

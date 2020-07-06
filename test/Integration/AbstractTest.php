@@ -52,7 +52,7 @@ abstract class AbstractTest extends TestCase
     protected function gitCommitWillReturn($value)
     {
         $this->shellMock->method("exec")
-            ->with("git log -1 --no-merges --pretty=format:%H")
+            ->with("git diff $(git rev-list --max-parents=0 HEAD)..HEAD | shasum | awk '{print $1}'")
             ->willReturn($value);
     }
 
