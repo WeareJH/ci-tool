@@ -31,6 +31,8 @@ class CommandFactory
                 return $this->di->get(RegisterBuilt::class);
             case "download-artifact":
                 return $this->di->get(DownloadArtifact::class);
+            case "print-registry":
+                return $this->di->get(PrintRegistry::class);
             default:
                 throw new \Exception("Command '{$cmd}' not found");
         }
