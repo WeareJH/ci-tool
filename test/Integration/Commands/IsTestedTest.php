@@ -26,7 +26,7 @@ class IsTestedTest extends AbstractTest
         $this->cmdFactory = $c->get(CommandFactory::class);
     }
 
-    public function testCommitIsVerifiedWhenItExist()
+    public function testHashIsVerifiedWhenItExist()
     {
         $registry = $this->store->loadRegistry();
         $registry->register(new Record("1234", "98"));
@@ -35,7 +35,7 @@ class IsTestedTest extends AbstractTest
 
         $this->shellMock->expects($this->once())
             ->method("exec")
-            ->with("git log -1 --no-merges --pretty=format:%H")
+            ->with("git diff $(git rev-list --max-parents=0 HEAD)..HEAD | shasum | awk '{print $1}'")
             ->willReturn("9876");
 
         $cmd = $this->cmdFactory->create("is-tested");
@@ -43,7 +43,7 @@ class IsTestedTest extends AbstractTest
         $this->assertEquals(0, $status);
     }
 
-    public function testCommitIsNotVerifiedWhenItDoesNotExist()
+    public function testHashIsNotVerifiedWhenItDoesNotExist()
     {
         $registry = $this->store->loadRegistry();
         $registry->register(new Record("1234", "98"));
@@ -52,7 +52,7 @@ class IsTestedTest extends AbstractTest
 
         $this->shellMock->expects($this->once())
             ->method("exec")
-            ->with("git log -1 --no-merges --pretty=format:%H")
+            ->with("git diff $(git rev-list --max-parents=0 HEAD)..HEAD | shasum | awk '{print $1}'")
             ->willReturn("abcde");
 
         $cmd = $this->cmdFactory->create("is-tested");

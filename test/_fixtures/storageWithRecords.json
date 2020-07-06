@@ -1,15 +1,15 @@
 {
   "records": [
     {
-      "commit_hash": "1234",
+      "hash": "1234",
       "ci_build_job_number": ""
     },
     {
-      "commit_hash": "9876",
+      "hash": "9876",
       "ci_build_job_number": ""
     },
     {
-      "commit_hash": "5555",
+      "hash": "5555",
       "ci_build_job_number": "12"
     }
   ]

@@ -21,8 +21,8 @@ class IsTested implements CommandInterface
     public function execute(): int
     {
         $registry = $this->store->loadRegistry();
-        $commitHash = $this->git->getSignificantCommit();
-        if ($registry->isCommitHashRecorded($commitHash)) {
+        $hash = $this->git->getCurrentHash();
+        if ($registry->isHashRecorded($hash)) {
             return 0;
         }
 

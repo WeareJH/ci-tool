@@ -31,12 +31,12 @@ class RegisterBuiltTest extends AbstractTest
     {
         $this->gitCommitWillReturn("1234");
         $this->CIBuildNumberWillReturn("99");
-        $this->expectConsoleOutput("Commit has been registered as built.", $this->once());
+        $this->expectConsoleOutput("Hash has been registered as built.", $this->once());
         $status = $this->registerBuilt->execute();
         $this->assertEquals(0, $status);
 
         $registry = $this->store->loadRegistry();
-        $record = $registry->getRecordByCommitHash("1234");
+        $record = $registry->getRecordByHash("1234");
         $this->assertEquals("99", $record->getBuildJobNumber());
     }
 }

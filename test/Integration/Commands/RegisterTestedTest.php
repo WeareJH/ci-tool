@@ -29,7 +29,7 @@ class RegisterTestedTest extends AbstractTest
     /**
      * @throws Exception
      */
-    public function testNoNewRecordsAreAddedToTheRegistryWhenCommitAlreadyExist()
+    public function testNoNewRecordsAreAddedToTheRegistryWhenHashAlreadyExist()
     {
         $registry = $this->store->loadRegistry();
         $registry->register(new Record("1234", "98"));
@@ -38,12 +38,12 @@ class RegisterTestedTest extends AbstractTest
 
         $this->shellMock->expects($this->once())
             ->method("exec")
-            ->with("git log -1 --no-merges --pretty=format:%H")
+            ->with("git diff $(git rev-list --max-parents=0 HEAD)..HEAD | shasum | awk '{print $1}'")
             ->willReturn("9876");
 
         $this->outputMock->expects($this->once())
             ->method("printLn")
-            ->with("Commit is already registered as tested");
+            ->with("Hash is already registered as tested");
 
         //registry starts with 2 records.
         $this->assertCount(2, $registry->getRecords());
@@ -57,7 +57,7 @@ class RegisterTestedTest extends AbstractTest
 
     }
 
-    public function testNewCommitIsAddedToTheRegistryAndPersisted()
+    public function testNewHashIsAddedToTheRegistryAndPersisted()
     {
         $registry = $this->store->loadRegistry();
         $registry->register(new Record("1234", "98"));
@@ -66,7 +66,7 @@ class RegisterTestedTest extends AbstractTest
 
         $this->shellMock->expects($this->once())
             ->method("exec")
-            ->with("git log -1 --no-merges --pretty=format:%H")
+            ->with("git diff $(git rev-list --max-parents=0 HEAD)..HEAD | shasum | awk '{print $1}'")
             ->willReturn("abcde");
 
         $this->envMock->method("readEnvVar")
@@ -75,7 +75,7 @@ class RegisterTestedTest extends AbstractTest
 
         $this->outputMock->expects($this->once())
             ->method("printLn")
-            ->with("Commit has been registered as tested");
+            ->with("Hash has been registered as tested");
 
         //registry starts with 2 records.
         $this->assertCount(2, $registry->getRecords());
@@ -87,11 +87,11 @@ class RegisterTestedTest extends AbstractTest
         //registry contains 3 records at the end, one of them is the new one.
         $registry = $this->store->loadRegistry();
         $this->assertCount(3, $registry->getRecords());
-        $this->assertTrue($registry->isCommitHashRecorded("abcde"));
+        $this->assertTrue($registry->isHashRecorded("abcde"));
 
         $record = null;
         foreach ($registry->getRecords() as $rec) {
-            if($rec->getCommitHash() === "abcde") {
+            if($rec->getHash() === "abcde") {
                 $record = $rec;
                 break;
             }
