@@ -1,5 +1,14 @@
 {
-  "autoload": {
+  "name" : "wearejh/ci-tool",
+  "description" : "CircleCI Performance Optimisations Tool",
+  "type" : "project",
+  "license" : "MIT",
+  "authors" : [
+    {
+      "name" : "Diego Cabrejas"
+    }
+  ],
+  "autoload" : {
     "psr-4": {
       "CITool\\": "src/",
       "CITool\\Test\\": "test/"
