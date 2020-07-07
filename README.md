@@ -42,6 +42,10 @@ if [[ ! php ci-tool download-artifact ]] then ;
 fi
 ```
 
+### ci-tool print-registry
+
+Prints the registry to stdout. It highlights the current hash
+
 ## Build
 
 Build a phar file from this project using https://github.com/clue/phar-composer
