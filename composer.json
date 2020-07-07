@@ -22,5 +22,5 @@
   "require-dev": {
     "phpunit/phpunit": "^9"
   },
-  "bin": ["src/main.php"]
+  "bin": ["src/ci-tool"]
 }
