@@ -1,6 +1,15 @@
+#!/usr/bin/env php
 <?php
 
-require __DIR__ . '/../vendor/autoload.php';
+
+foreach (array(__DIR__ . '/../../autoload.php', __DIR__ . '/../vendor/autoload.php') as $file) {
+    if (file_exists($file)) {
+        define('CI_TOOL_COMPOSER_AUTOLOADER', $file);
+        break;
+    }
+}
+
+require CI_TOOL_COMPOSER_AUTOLOADER;
 require __DIR__ . '/bootstrap.php';
 
 use CITool\Commands\CommandFactory;
